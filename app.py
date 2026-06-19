@@ -7,7 +7,7 @@ from collections import defaultdict
 # ================== CONFIGURAÇÃO INICIAL ==================
 st.set_page_config(
     page_title="Ohana Studio",
-    page_icon="🌸",
+    page_icon="🍃",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -60,14 +60,16 @@ ETAPAS = [
 DIAS_SEMANA = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"]
 
 CORES = {
-    "rosa": "#E91E8C",
-    "lavanda": "#9B59B6",
-    "dourado": "#F4A460",
-    "bg": "#FAF5FF",
-    "texto": "#2D2D2D",
-    "verde": "#27AE60",
-    "vermelho": "#E74C3C",
-    "amarelo": "#F1C40F"
+    "primario": "#1B4332",       # verde escuro logo
+    "secundario": "#C9A96E",     # dourado/creme
+    "bg": "#F5F0E8",             # bege off-white
+    "bg_card": "#FFFFFF",
+    "texto": "#1A1A1A",
+    "texto_suave": "#5C5C5C",
+    "verde": "#2D6A4F",
+    "vermelho": "#C0392B",
+    "amarelo": "#B7860B",
+    "borda": "#E0D8CC",
 }
 
 # ================== PERSISTÊNCIA ==================
@@ -106,58 +108,153 @@ def save_and_reload(data):
 def inject_css():
     st.markdown(f"""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap');
 
     html, body, [class*="css"] {{
         font-family: 'Inter', sans-serif !important;
         background-color: {CORES['bg']} !important;
+        color: {CORES['texto']} !important;
+    }}
+
+    /* Fundo geral */
+    .stApp {{
+        background-color: {CORES['bg']} !important;
     }}
 
     .ohana-title {{
-        font-family: 'Playfair Display', serif;
-        font-size: 2.5rem;
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 2.6rem;
         font-weight: 700;
-        color: {CORES['rosa']};
-        margin-bottom: 0.2rem;
+        color: {CORES['primario']};
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        margin-bottom: 0.1rem;
+        line-height: 1.1;
+    }}
+
+    .ohana-brand {{
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 1rem;
+        font-weight: 400;
+        color: {CORES['secundario']};
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        margin-bottom: 1rem;
     }}
 
     .ohana-subtitle {{
-        color: {CORES['lavanda']};
-        font-weight: 500;
+        color: {CORES['texto_suave']};
+        font-weight: 400;
+        font-size: 0.95rem;
         margin-bottom: 1rem;
+        letter-spacing: 0.02em;
     }}
 
     .ohana-card {{
-        background: white;
-        border-radius: 16px;
-        padding: 1.2rem;
-        box-shadow: 0 4px 16px rgba(233, 30, 140, 0.08);
-        border: 1px solid rgba(155, 89, 182, 0.15);
-        margin-bottom: 1rem;
+        background: {CORES['bg_card']};
+        border-radius: 4px;
+        padding: 1.2rem 1.4rem;
+        border: 1px solid {CORES['borda']};
+        margin-bottom: 0.8rem;
+        border-left: 3px solid {CORES['primario']};
     }}
 
     .dia-card {{
-        background: white;
-        border-radius: 14px;
+        background: {CORES['bg_card']};
+        border-radius: 4px;
         padding: 1rem;
-        min-height: 140px;
-        box-shadow: 0 2px 10px rgba(155, 89, 182, 0.08);
-        border-top: 4px solid {CORES['rosa']};
+        min-height: 130px;
+        border: 1px solid {CORES['borda']};
+        border-top: 3px solid {CORES['primario']};
         margin-bottom: 0.5rem;
     }}
 
     .footer {{
         text-align: center;
         padding: 2rem 1rem;
-        color: {CORES['lavanda']};
-        font-size: 0.85rem;
+        color: {CORES['texto_suave']};
+        font-size: 0.8rem;
         margin-top: 2rem;
-        border-top: 1px solid rgba(155, 89, 182, 0.2);
+        border-top: 1px solid {CORES['borda']};
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
     }}
 
     div.stButton > button {{
-        border-radius: 12px;
-        font-weight: 600;
+        border-radius: 2px;
+        font-weight: 500;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        font-size: 0.82rem;
+        border: 1px solid {CORES['primario']} !important;
+        color: {CORES['primario']} !important;
+        background: transparent !important;
+        transition: all 0.2s ease;
+    }}
+
+    div.stButton > button:hover {{
+        background: {CORES['primario']} !important;
+        color: white !important;
+    }}
+
+    div.stButton > button[kind="primary"] {{
+        background: {CORES['primario']} !important;
+        color: white !important;
+    }}
+
+    div.stButton > button[kind="primary"]:hover {{
+        background: {CORES['secundario']} !important;
+        border-color: {CORES['secundario']} !important;
+        color: white !important;
+    }}
+
+    /* Sidebar */
+    section[data-testid="stSidebar"] {{
+        background-color: {CORES['primario']} !important;
+    }}
+
+    section[data-testid="stSidebar"] * {{
+        color: white !important;
+    }}
+
+    section[data-testid="stSidebar"] div.stButton > button {{
+        border-color: rgba(255,255,255,0.3) !important;
+        color: white !important;
+        background: transparent !important;
+    }}
+
+    section[data-testid="stSidebar"] div.stButton > button:hover {{
+        background: rgba(255,255,255,0.15) !important;
+        border-color: white !important;
+    }}
+
+    /* Inputs */
+    .stTextInput > div > div > input,
+    .stTextArea > div > div > textarea {{
+        border-radius: 2px !important;
+        border: 1px solid {CORES['borda']} !important;
+        background: white !important;
+    }}
+
+    /* Tabs */
+    .stTabs [data-baseweb="tab"] {{
+        font-size: 0.85rem;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+    }}
+
+    .stTabs [aria-selected="true"] {{
+        color: {CORES['primario']} !important;
+        border-bottom-color: {CORES['primario']} !important;
+    }}
+
+    /* Progress bar */
+    .stProgress > div > div > div > div {{
+        background-color: {CORES['primario']} !important;
+    }}
+
+    hr {{
+        border-color: {CORES['borda']} !important;
     }}
     </style>
     """, unsafe_allow_html=True)
@@ -186,12 +283,12 @@ def calcular_progresso(look):
 def status_dia(look):
     progresso = calcular_progresso(look)
     if look.get("finalizado") or progresso >= 1.0:
-        return "✅", CORES["verde"], "Finalizado"
+        return "●", CORES["verde"], "Finalizado"
     elif progresso >= 0.5:
-        return "🟡", CORES["amarelo"], "Em andamento"
+        return "●", CORES["amarelo"], "Em andamento"
     elif progresso > 0:
-        return "🔴", CORES["vermelho"], "Iniciado"
-    return "⚪", "#CCCCCC", "Vazio"
+        return "●", CORES["vermelho"], "Iniciado"
+    return "○", CORES["borda"], "Vazio"
 
 
 def looks_por_semana(data):
@@ -207,8 +304,8 @@ def looks_por_semana(data):
 
 # ================== PÁGINAS ==================
 def page_dashboard(data):
-    st.markdown("<div class='ohana-title'>🌸 Ohana Studio</div>", unsafe_allow_html=True)
-    st.markdown("<div class='ohana-subtitle'>Organização criativa de looks de moda</div>", unsafe_allow_html=True)
+    st.markdown("<div class='ohana-title'>Ohana</div><div class='ohana-brand'>Lifestyle · Studio</div>", unsafe_allow_html=True)
+    st.markdown("<div class='ohana-subtitle'>Curadoria de moda feminina</div>", unsafe_allow_html=True)
     st.markdown("---")
 
     total_looks = len(data["looks"])
@@ -222,7 +319,7 @@ def page_dashboard(data):
     c3.metric("Atrasados", atrasados)
     c4.metric("Total", total_looks)
 
-    st.markdown("### 📅 Calendário Semanal")
+    st.markdown("### Calendário Semanal")
     cols = st.columns(7)
     for i, dia in enumerate(DIAS_SEMANA):
         look = get_look(data, dia)
@@ -230,9 +327,9 @@ def page_dashboard(data):
         with cols[i]:
             st.markdown(f"""
             <div class='dia-card'>
-                <div style='font-weight:700; color:{CORES['lavanda']};'>{dia}</div>
-                <div style='font-size:1.8rem; margin:0.5rem 0;'>{emoji}</div>
-                <div style='font-size:0.75rem; color:{cor};'>{label}</div>
+                <div style='font-weight:600; color:{CORES['primario']}; font-size:0.78rem; letter-spacing:0.08em; text-transform:uppercase;'>{dia}</div>
+                <div style='font-size:1.4rem; margin:0.5rem 0; color:{cor};'>{emoji}</div>
+                <div style='font-size:0.72rem; color:{cor}; letter-spacing:0.03em; font-weight:500;'>{label}</div>
             </div>
             """, unsafe_allow_html=True)
             if st.button(f"Abrir", key=f"dash_{dia}", use_container_width=True):
@@ -240,7 +337,7 @@ def page_dashboard(data):
                 st.session_state["dia_selecionado"] = dia
                 st.rerun()
 
-    st.markdown("### 🎯 Prioridade do Dia")
+    st.markdown("### Prioridade do Dia")
     prioridade = None
     for dia in DIAS_SEMANA:
         look = get_look(data, dia)
@@ -265,7 +362,7 @@ def page_dashboard(data):
     else:
         st.info("Nenhum look em andamento. Crie um novo look na aba 'Criar Look'.")
 
-    st.markdown("### 🗂️ Andamento Geral")
+    st.markdown("### Andamento Geral")
     cards = [(dia, get_look(data, dia)) for dia in DIAS_SEMANA if calcular_progresso(get_look(data, dia)) > 0]
     if not cards:
         st.info("Nenhum look iniciado ainda.")
@@ -282,8 +379,8 @@ def page_dashboard(data):
 
 
 def page_criar_look(data):
-    st.markdown("<div class='ohana-title'>✨ Criar / Editar Look</div>", unsafe_allow_html=True)
-    st.markdown("<div class='ohana-subtitle'>Preencha as 9 etapas do fluxo</div>", unsafe_allow_html=True)
+    st.markdown("<div class='ohana-title'>Criar Look</div>", unsafe_allow_html=True)
+    st.markdown("<div class='ohana-subtitle'>Preencha as 9 etapas do fluxo de criação</div>", unsafe_allow_html=True)
     st.markdown("---")
 
     dia = st.selectbox(
@@ -301,7 +398,7 @@ def page_criar_look(data):
     st.progress(prog, text=f"Progresso: {int(prog * 100)}%")
     st.markdown("---")
 
-    st.markdown("### 📋 Etapas")
+    st.markdown("### Etapas do Look")
     for idx, (nome, icone, tipo) in enumerate(ETAPAS):
         with st.expander(f"{icone} {idx + 1}. {nome}", expanded=not look["etapas"][nome]["concluida"]):
             concluida = st.checkbox("Concluída", value=look["etapas"][nome]["concluida"], key=f"chk_{dia}_{idx}")
@@ -329,8 +426,8 @@ def page_criar_look(data):
 
 
 def page_biblioteca(data):
-    st.markdown("<div class='ohana-title'>📚 Biblioteca</div>", unsafe_allow_html=True)
-    st.markdown("<div class='ohana-subtitle'>Acervo de prompts, links e modelos</div>", unsafe_allow_html=True)
+    st.markdown("<div class='ohana-title'>Biblioteca</div>", unsafe_allow_html=True)
+    st.markdown("<div class='ohana-subtitle'>Acervo de prompts, referências e modelos</div>", unsafe_allow_html=True)
     st.markdown("---")
 
     tabs = st.tabs(["📝 Prompts", "📌 Pinterest", "🛍️ Shopee", "👗 Modelos"])
@@ -404,8 +501,8 @@ def page_biblioteca(data):
 
 
 def page_historico(data):
-    st.markdown("<div class='ohana-title'>📜 Histórico</div>", unsafe_allow_html=True)
-    st.markdown("<div class='ohana-subtitle'>Looks finalizados por semana</div>", unsafe_allow_html=True)
+    st.markdown("<div class='ohana-title'>Histórico</div>", unsafe_allow_html=True)
+    st.markdown("<div class='ohana-subtitle'>Looks finalizados organizados por semana</div>", unsafe_allow_html=True)
     st.markdown("---")
 
     semanas = looks_por_semana(data)
@@ -430,9 +527,9 @@ def page_historico(data):
 def sidebar(data):
     with st.sidebar:
         st.markdown(f"""
-        <div style='text-align:center; padding:1rem 0;'>
-            <div style='font-family:serif; font-size:1.8rem; color:{CORES['rosa']};'>🌸 Ohana Studio</div>
-            <div style='color:{CORES['lavanda']}; font-size:0.9rem;'>Moda organizada com amor</div>
+        <div style='text-align:center; padding:1.5rem 0 1rem 0;'>
+            <div style='font-family:Cormorant Garamond, Georgia, serif; font-size:2rem; font-weight:700; color:white; letter-spacing:0.1em; text-transform:uppercase; line-height:1;'>OHANA</div>
+            <div style='font-family:Inter, sans-serif; font-size:0.7rem; font-weight:400; color:{CORES['secundario']}; letter-spacing:0.25em; text-transform:uppercase; margin-top:4px;'>LIFESTYLE · STUDIO</div>
         </div>
         """, unsafe_allow_html=True)
 
@@ -451,7 +548,7 @@ def sidebar(data):
             st.success("Resetado!")
             st.rerun()
 
-        st.markdown(f"<div style='font-size:0.75rem; color:#aaa; margin-top:1rem;'>v1.0 — Ohana Studio</div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='font-size:0.7rem; color:{CORES['secundario']}; margin-top:1rem; letter-spacing:0.1em; text-transform:uppercase;'>v1.0 · Ohana Studio</div>", unsafe_allow_html=True)
 
 
 # ================== MAIN ==================
@@ -472,7 +569,7 @@ def main():
 
     st.markdown("""
     <div class='footer'>
-        🌸 Ohana Studio — Feito com carinho para organizar sua moda criativa.
+        OHANA LIFESTYLE · STUDIO &nbsp;·&nbsp; Curadoria de moda feminina
     </div>
     """, unsafe_allow_html=True)
 
